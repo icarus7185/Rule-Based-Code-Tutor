@@ -96,7 +96,7 @@
                 // 2. Gọi API dựa vào phương thức nhập
                 if (method === 'textarea') {
                     // Gọi API với dữ liệu từ textarea
-                    htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
+                    htmlResponse = await fetch(`/api/analyze?input_source_code=${encodeURIComponent(refinedArea.value)}`);
                 } else {
                     // Gọi API upload file .cpp - trả về HTML trực tiếp
                     const fileInput = document.getElementById('cppFileInput');

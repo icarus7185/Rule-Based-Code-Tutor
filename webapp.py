@@ -57,6 +57,7 @@ async def upload_cpp_file(file: UploadFile = File(...)):
         rules = json.load(open('rules.json'))
         tutor = GenericRuleEngine(rules)
         print("--- Đang phân tích file .cpp... ---")
+        print(file_content)
         issues = tutor.analyze(file_content)
         
         # TẠO BÁO CÁO HTML
