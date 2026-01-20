@@ -57,12 +57,10 @@
     </div>
     
     <div class="control-group">
-        <input type="text" id="rawPrompt" placeholder="Just placeholder, upload file here ...">
         <button id="btnGen" onclick="runWorkflow()">Analyzer</button>
     </div>
-    <div class="analyzer-container">
-        <p>put iframe here</p>
-    </div>
+    
+    <iframe id="resultFrame" width="100%" height="100%" title="Embedded HTML Content"></iframe>
 
     <script>
         // Chuyển đổi giữa nhập trực tiếp và upload file
@@ -126,6 +124,14 @@
                 const blob = new Blob([cleanedHtml], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
                 window.open(url, '_blank');
+
+                var iframe = document.getElementById('resultFrame');
+                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                
+                // Write the HTML string into the iframe's document
+                iframeDoc.open();
+                iframeDoc.write(cleanedHtml);
+                iframeDoc.close();
 
             } catch (error) {
                 alert("Có lỗi: " + error.message);
