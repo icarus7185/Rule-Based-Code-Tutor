@@ -20,7 +20,7 @@ async def read_root():
 # --- API 1: Xử lý Prompt (Text -> Text) ---
 @app.get("/api/analyze")
 async def process_prompt(text: str = ""):
-    with open('clientUI.html', 'r', encoding='utf-8') as file:
+    with open('ket_qua_phan_tich.html', 'r', encoding='utf-8') as file:
         html_content = file.read()
 
     return html_content
