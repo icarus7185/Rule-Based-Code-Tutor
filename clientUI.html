@@ -54,7 +54,7 @@
                 // 2. Gọi API Prompt
                 const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
                 
-                // open htmlResponse on new tab
+                console.log(htmlResponse);
                 
                 // open htmlResponse on new tab
                 const htmlText = await htmlResponse.text();
