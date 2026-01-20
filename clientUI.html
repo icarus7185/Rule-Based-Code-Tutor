@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG-DiffusionMaster</title>
+    <title>C++ Code Tutor</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; padding: 20px; max-width: 1500px; margin: 0 auto; }
         .control-group { margin-bottom: 20px; display: flex; gap: 10px; }
@@ -47,12 +47,12 @@
             
             // 1. Reset trạng thái
             btn.disabled = true;
-            refinedArea.value = "Processing...";
+            // refinedArea.value = "Processing...";
             
 
             try {
                 // 2. Gọi API Prompt
-                const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(rawText)}`);
+                const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
                 
                 // open htmlResponse on new tab
                 
