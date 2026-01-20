@@ -1,0 +1,56 @@
+[
+  {
+    "id": "R00",
+    "type": "SYNTAX",
+    "priority": 1,
+    "scope": "STRUCTURAL",
+    "message": "Lỗi cấu trúc đóng/mở ngoặc.",
+    "suggestion": "Kiểm tra lại các cặp dấu {}, () hoặc [] xem đã đóng đủ chưa hoặc có bị ngược không."
+  },
+  {
+    "id": "R01",
+    "type": "SYNTAX",
+    "priority": 1,
+    "scope": "FILE",
+    "trigger_pattern": "(cin|cout)",
+    "required_pattern": "#include\\s*<iostream>",
+    "message": "Thiếu thư viện <iostream>.",
+    "suggestion": "Thêm dòng '#include <iostream>' vào đầu tệp tin để sử dụng cin/cout."
+  },
+  {
+    "id": "R02",
+    "type": "SYNTAX",
+    "priority": 1,
+    "scope": "LINE",
+    "pattern": "^(?!.*(include|define|if|else|for|while|main|((void|int|float|double|char)\\s+[a-zA-Z_]\\w*\\s*\\()|\\{|\\}|:)).*[^;]$",
+    "message": "Thiếu dấu chấm phẩy.",
+    "suggestion": "Thêm ';' vào cuối dòng này."
+  },
+  {
+    "id": "R03",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "if\\s*\\(.*[^=!><]=[^=].*\\)",
+    "message": "Phép gán trong điều kiện 'if'.",
+    "suggestion": "Thay '=' bằng '==' để thực hiện phép so sánh đúng."
+  },
+  {
+    "id": "R04",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "/\\s*0(?![.0-9])",
+    "message": "Lỗi chia cho số 0.",
+    "suggestion": "Đảm bảo số chia khác 0 trước khi thực hiện phép tính."
+  },
+  {
+    "id": "R05",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "void\\s+main\\s*\\(",
+    "message": "Sử dụng 'void main()' không chuẩn.",
+    "suggestion": "Hãy sửa thành 'int main()' và trả về 0 ở cuối hàm."
+  }
+]
