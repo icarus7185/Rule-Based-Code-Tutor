@@ -52,13 +52,16 @@
 
             try {
                 // 2. Gọi API Prompt
-                const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
                 
-                console.log(htmlResponse);
+                const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
                 
                 // open htmlResponse on new tab
                 const htmlText = await htmlResponse.text();
-                const blob = new Blob([htmlText], { type: 'text/html' });
+                
+                // Sửa các ký tự escape \n thành newline thực
+                const cleanedHtml = htmlText.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\\"/g, '"');
+                
+                const blob = new Blob([cleanedHtml], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
                 window.open(url, '_blank');
 
