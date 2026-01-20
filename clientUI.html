@@ -20,42 +20,104 @@
         .image-box h3 { margin: 0; color: #333; font-size: 14px; }
         
         .loading { color: #666; font-style: italic; display: none; }
+        
+        .input-method-group { margin-bottom: 20px; }
+        .input-method-group label { display: inline-block; margin-right: 20px; margin-top: 0; font-weight: normal; }
+        .input-method-group input[type="radio"] { margin-right: 5px; cursor: pointer; }
+        
+        #textareaContainer { display: block; }
+        #fileUploadContainer { display: none; }
     </style>
 </head>
     
 <body>
     <h1>Rule-Based Code Tutor</h1>
     
+    <div class="input-method-group">
+        <label>
+            <input type="radio" name="inputMethod" value="textarea" checked onchange="switchInputMethod()">
+            Nhập trực tiếp
+        </label>
+        <label>
+            <input type="radio" name="inputMethod" value="file" onchange="switchInputMethod()">
+            Upload file .cpp
+        </label>
+    </div>
+
+    <div id="textareaContainer">
+        <label>Nhập đoạn code C++:</label>
+        <textarea id="sourceCode"></textarea>
+    </div>
+    
+    <div id="fileUploadContainer">
+        <label>Chọn file .cpp:</label>
+        <div class="control-group" style="margin-bottom: 20px;">
+            <input type="file" id="cppFileInput" accept=".cpp" style="flex: 1; padding: 10px;">
+        </div>
+    </div>
+    
     <div class="control-group">
         <input type="text" id="rawPrompt" placeholder="Just placeholder, upload file here ...">
         <button id="btnGen" onclick="runWorkflow()">Analyzer</button>
     </div>
-
-    <label>Nhập đoạn code C++:</label>
-    <textarea id="sourceCode"></textarea>
     <div class="analyzer-container">
         <p>put iframe here</p>
     </div>
 
     <script>
+        // Chuyển đổi giữa nhập trực tiếp và upload file
+        function switchInputMethod() {
+            const method = document.querySelector('input[name="inputMethod"]:checked').value;
+            const textareaContainer = document.getElementById('textareaContainer');
+            const fileUploadContainer = document.getElementById('fileUploadContainer');
+            
+            if (method === 'textarea') {
+                textareaContainer.style.display = 'block';
+                fileUploadContainer.style.display = 'none';
+            } else {
+                textareaContainer.style.display = 'none';
+                fileUploadContainer.style.display = 'block';
+            }
+        }
+        
         
 
         async function runWorkflow() {
-            // const rawText = document.getElementById('rawPrompt').value;
+            const method = document.querySelector('input[name="inputMethod"]:checked').value;
             const refinedArea = document.getElementById('sourceCode');
             const btn = document.getElementById('btnGen');
             
             // 1. Reset trạng thái
             btn.disabled = true;
-            // refinedArea.value = "Processing...";
-            
 
             try {
-                // 2. Gọi API Prompt
+                let htmlResponse;
                 
-                const htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
+                // 2. Gọi API dựa vào phương thức nhập
+                if (method === 'textarea') {
+                    // Gọi API với dữ liệu từ textarea
+                    htmlResponse = await fetch(`/api/analyze?text=${encodeURIComponent(refinedArea.value)}`);
+                } else {
+                    // Gọi API upload file .cpp - trả về HTML trực tiếp
+                    const fileInput = document.getElementById('cppFileInput');
+                    const file = fileInput.files[0];
+                    
+                    if (!file) {
+                        alert('Vui lòng chọn file .cpp');
+                        btn.disabled = false;
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    htmlResponse = await fetch('/api/upload-cpp', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
                 
-                // open htmlResponse on new tab
+                // 3. Mở kết quả HTML trong tab mới
                 const htmlText = await htmlResponse.text();
                 
                 // Sửa các ký tự escape \n thành newline thực

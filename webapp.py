@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, UploadFile, File
 from fastapi.responses import HTMLResponse, JSONResponse
 import io
 from pydantic import BaseModel
@@ -42,14 +42,30 @@ async def process_prompt(input_source_code: str = ""):
 
     with open('ket_qua_phan_tich.html', 'r', encoding='utf-8') as file:
         html_content = file.read()
-        
+
     print(html_content)
     return html_content
 
-@app.post("/api/analyze")
-async def generate_image1(promptData: PromptRequest):
-    print(promptData.content)
-    with open('ket_qua_phan_tich.html', 'r', encoding='utf-8') as file:
-        html_content = file.read()
-
-    return html_content
+# --- API 2: Upload file .cpp và trả về HTML report ---
+@app.post("/api/upload-cpp")
+async def upload_cpp_file(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        file_content = content.decode('utf-8')
+        
+        # Phân tích code
+        rules = json.load(open('rules.json'))
+        tutor = GenericRuleEngine(rules)
+        print("--- Đang phân tích file .cpp... ---")
+        issues = tutor.analyze(file_content)
+        
+        # TẠO BÁO CÁO HTML
+        report_obj = ReportMaker(file_content, issues)
+        report_obj.generate_html_report("ket_qua_phan_tich.html")
+        
+        with open('ket_qua_phan_tich.html', 'r', encoding='utf-8') as html_file:
+            html_content = html_file.read()
+        
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        return HTMLResponse(content=f"<h1>Lỗi: {str(e)}</h1>")
