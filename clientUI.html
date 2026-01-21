@@ -31,7 +31,7 @@
 </head>
     
 <body>
-    <h1>Rule-Based Code Tutor</h1>
+    <h1>Hệ thống Hỗ trợ học Lập trình C++ bằng kỹ thuật Rule-Based</h1>
     
     <div class="input-method-group">
         <label>
@@ -119,11 +119,12 @@
                 const htmlText = await htmlResponse.text();
                 
                 // Sửa các ký tự escape \n thành newline thực
-                const cleanedHtml = htmlText.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\\"/g, '"');
+                const cleanedHtml = htmlText.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\\"/g, '"').replace(/^"|"$/g, '');
                 
-                const blob = new Blob([cleanedHtml], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                window.open(url, '_blank');
+                // const blob = new Blob([cleanedHtml], { type: 'text/html' });
+                // const url = URL.createObjectURL(blob);
+                // window.open(url, '_blank');
+                //console.log(cleanedHtml);
 
                 var iframe = document.getElementById('resultFrame');
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;

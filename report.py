@@ -83,7 +83,7 @@ class ReportMaker:
         </head>
         <body>
             <div class="container">
-                <h1>Hệ thống Hỗ trợ Lập trình C++</h1>
+                <h1>Báo cáo phân tích mã nguồn</h1>
                 {guide_html}
                 <hr>
                 {code_viewer_html}
