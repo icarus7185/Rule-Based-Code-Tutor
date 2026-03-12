@@ -148,7 +148,7 @@
     "type": "LOGIC",
     "priority": 2,
     "scope": "LINE",
-    "pattern": "(?:<<|\\+|\\-|\\*|/|==|!=|=)\\s*\\*\\s*[a-zA-Z_]\\w*",
+    "pattern": "\\*\\s*\\w+",
     "message": "Có thể dereference con trỏ null hoặc chưa khởi tạo.",
     "suggestion": "Đảm bảo con trỏ được khởi tạo hợp lệ và kiểm tra nullptr trước khi dereference."
   },
@@ -218,7 +218,7 @@
   {
     "id": "R24",
     "type": "WARNING",
-    "priority": 4,
+    "priority": 3,
     "scope": "LINE",
     "pattern": "int\\s+\\w+\\s*;",
     "message": "Biến có thể chưa được khởi tạo.",
@@ -256,7 +256,7 @@
     "type": "WARNING",
     "priority": 3,
     "scope": "LINE",
-    "pattern": "\\b[a-zA-Z_]\\w*\\s*=\\s*[a-zA-Z_]\\w*\\s*;",
+    "pattern": "\\w+\\s*=\\s*\\w+\\s*;",
     "message": "Sao chép biến có thể không cần thiết.",
     "suggestion": "Cân nhắc dùng const reference để tránh sao chép không cần thiết."
   },
@@ -286,5 +286,266 @@
     "pattern": "\\w+\\s*\\(\\s*const\\s+\\w+\\s*&",
     "message": "Truyền const reference nhưng hàm có thể cần thay đổi dữ liệu.",
     "suggestion": "Nếu cần thay đổi dữ liệu, hãy bỏ const hoặc truyền con trỏ/reference phù hợp."
+  },
+  {
+    "id": "R32",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "mutable\\s+\\w+",
+    "message": "Sử dụng mutable có thể phá vỡ const correctness.",
+    "suggestion": "Chỉ dùng mutable khi thực sự cần thiết (ví dụ cache nội bộ)."
+  },
+  {
+    "id": "R33",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "const_cast\\s*<",
+    "message": "Sử dụng const_cast để loại bỏ const.",
+    "suggestion": "Tránh dùng const_cast vì có thể dẫn đến undefined behavior."
+  },
+  {
+    "id": "R34",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "\\w+\\s*\\(\\s*\\w+\\s*&\\s*\\w+\\s*\\)",
+    "message": "Truyền reference không const.",
+    "suggestion": "Nếu không thay đổi giá trị, hãy dùng const reference."
+  },
+  {
+    "id": "R35",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "return\\s+\\w+\\s*;",
+    "message": "Trả về object bằng value có thể gây copy không cần thiết.",
+    "suggestion": "Cân nhắc trả về const reference hoặc sử dụng move semantics."
+  },
+  {
+    "id": "R36",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "new\\s+\\w+",
+    "message": "Sử dụng new trực tiếp thay vì smart pointer.",
+    "suggestion": "Ưu tiên dùng std::unique_ptr hoặc std::shared_ptr để quản lý vòng đời bộ nhớ."
+  },
+  {
+    "id": "R37",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::shared_ptr\\s*<",
+    "message": "Sử dụng shared_ptr có thể gây overhead không cần thiết.",
+    "suggestion": "Nếu không cần chia sẻ ownership, hãy dùng std::unique_ptr."
+  },
+  {
+    "id": "R38",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::shared_ptr<[^>]+>\\s+\\w+\\s*=\\s*new",
+    "message": "Khởi tạo shared_ptr bằng new.",
+    "suggestion": "Dùng std::make_shared để tránh memory leak và tối ưu bộ nhớ."
+  },
+  {
+    "id": "R39",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::unique_ptr<[^>]+>\\s+\\w+\\s*=\\s*new",
+    "message": "Khởi tạo unique_ptr bằng new.",
+    "suggestion": "Dùng std::make_unique để an toàn và rõ ràng hơn."
+  },
+  {
+    "id": "R40",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::unique_ptr<[^>]+>\\s+\\w+\\s*=\\s*\\w+",
+    "message": "Gán unique_ptr bằng copy.",
+    "suggestion": "unique_ptr không cho phép copy, hãy dùng std::move."
+  },
+  {
+    "id": "R41",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::shared_ptr<[^>]+>\\s+\\w+\\s*\\(\\s*\\w+\\s*\\)",
+    "message": "Tạo nhiều shared_ptr từ cùng raw pointer.",
+    "suggestion": "Tránh tạo nhiều shared_ptr từ cùng raw pointer vì sẽ gây double delete."
+  },
+  {
+    "id": "R42",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "std::weak_ptr<",
+    "message": "Sử dụng weak_ptr nhưng chưa kiểm tra lock().",
+    "suggestion": "Luôn kiểm tra weak_ptr bằng lock() trước khi sử dụng."
+  },
+  {
+    "id": "R43",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "class\\s+\\w+\\s*\\{[^}]*~\\w+\\s*\\(",
+    "message": "Class có destructor nhưng không khai báo move constructor.",
+    "suggestion": "Cân nhắc khai báo move constructor và move assignment để tối ưu hiệu năng."
+  },
+  {
+    "id": "R44",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "class\\s+\\w+\\s*\\{[^}]*\\w+\\s*\\(const\\s+\\w+\\s*&",
+    "message": "Class có copy constructor nhưng thiếu move constructor.",
+    "suggestion": "Thêm move constructor để tận dụng move semantics."
+  },
+  {
+    "id": "R45",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "return\\s+std::move\\s*\\(",
+    "message": "Sử dụng std::move trong return có thể cản trở copy elision.",
+    "suggestion": "Không cần std::move khi return local object."
+  },
+  {
+    "id": "R46",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "std::move\\s*\\(\\s*\\w+\\s*\\)",
+    "message": "Sử dụng std::move không cần thiết.",
+    "suggestion": "Chỉ dùng std::move khi thực sự muốn chuyển quyền sở hữu."
+  },
+  {
+    "id": "R47",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "\\w+\\s*=\\s*\\w+\\s*;",
+    "message": "Phép gán có thể gây copy không cần thiết.",
+    "suggestion": "Cân nhắc dùng std::move nếu biến nguồn không còn được sử dụng."
+  },
+  {
+    "id": "R48",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "return\\s+\\w+\\s*;",
+    "message": "Return object by value có thể gây copy.",
+    "suggestion": "Trình biên dịch có thể tối ưu bằng copy elision, tránh thêm std::move không cần thiết."
+  },
+  {
+    "id": "R49",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::thread\\s+\\w+\\s*\\(",
+    "message": "Tạo thread nhưng chưa thấy join hoặc detach.",
+    "suggestion": "Đảm bảo thread được join() hoặc detach() trước khi đối tượng thread bị hủy."
+  },
+  {
+    "id": "R50",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "\\.detach\\s*\\(",
+    "message": "Sử dụng detach có thể gây truy cập dữ liệu không an toàn.",
+    "suggestion": "Cẩn thận khi dùng detach, đảm bảo dữ liệu thread truy cập vẫn còn tồn tại."
+  },
+  {
+    "id": "R51",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::mutex\\s+\\w+\\s*;",
+    "message": "Khai báo mutex nhưng chưa thấy sử dụng.",
+    "suggestion": "Đảm bảo mutex được lock/unlock để bảo vệ tài nguyên dùng chung."
+  },
+  {
+    "id": "R52",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "\\.lock\\s*\\(",
+    "message": "Gọi lock() trực tiếp có nguy cơ quên unlock.",
+    "suggestion": "Nên dùng std::lock_guard hoặc std::unique_lock để đảm bảo RAII."
+  },
+  {
+    "id": "R53",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "\\.unlock\\s*\\(",
+    "message": "Gọi unlock() thủ công.",
+    "suggestion": "Tránh unlock thủ công, ưu tiên RAII với lock_guard hoặc unique_lock."
+  },
+  {
+    "id": "R54",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::lock_guard\\s*<",
+    "message": "Sử dụng lock_guard nhưng phạm vi có thể quá lớn.",
+    "suggestion": "Giới hạn scope của lock_guard để tránh giữ khóa quá lâu."
+  },
+  {
+    "id": "R55",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::unique_lock\\s*<",
+    "message": "Sử dụng unique_lock.",
+    "suggestion": "Đảm bảo bạn thực sự cần khả năng lock/unlock linh hoạt của unique_lock."
+  },
+  {
+    "id": "R56",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::mutex\\s+\\w+.*std::mutex\\s+\\w+",
+    "message": "Sử dụng nhiều mutex có nguy cơ deadlock.",
+    "suggestion": "Dùng std::lock hoặc std::scoped_lock để lock nhiều mutex an toàn."
+  },
+  {
+    "id": "R57",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "static\\s+\\w+",
+    "message": "Biến static dùng trong môi trường đa luồng.",
+    "suggestion": "Đảm bảo truy cập biến static là thread-safe hoặc được bảo vệ bằng mutex."
+  },
+  {
+    "id": "R58",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "std::atomic<",
+    "message": "Sử dụng atomic.",
+    "suggestion": "Đảm bảo atomic phù hợp, tránh kết hợp atomic với mutex không cần thiết."
+  },
+  {
+    "id": "R59",
+    "type": "WARNING",
+    "priority": 3,
+    "scope": "LINE",
+    "pattern": "volatile\\s+",
+    "message": "Sử dụng volatile trong lập trình đa luồng.",
+    "suggestion": "volatile không đảm bảo thread-safety, hãy dùng std::atomic hoặc mutex."
+  },
+  {
+    "id": "R60",
+    "type": "LOGIC",
+    "priority": 2,
+    "scope": "LINE",
+    "pattern": "condition_variable\\s+\\w+",
+    "message": "Sử dụng condition_variable.",
+    "suggestion": "Luôn dùng condition_variable cùng mutex và kiểm tra điều kiện trong vòng lặp."
   }
 ]

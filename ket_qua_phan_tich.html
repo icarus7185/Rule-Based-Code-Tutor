@@ -6,33 +6,42 @@
             <title>Báo cáo phân tích mã nguồn</title>
             
         <style>
-            body { font-family: sans-serif; background-color: #f4f4f9; margin: 20px; }
-            .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-            h1 { color: #333; text-align: center; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; margin: 20px; }
+            .container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
             .guide-section { margin-bottom: 30px; }
-            .step-title { font-weight: bold; margin-top: 15px; padding: 5px; color: white; border-radius: 4px;}
-            .step-p1 { background-color: #d9534f; } /* Red for Syntax */
-            .step-p2 { background-color: #f0ad4e; } /* Orange for Logic */
-            .step-p3 { background-color: #5bc0de; } /* Blue for Info/Warning */
-            .issue-item { margin-left: 20px; padding: 5px; border-left: 3px solid #ddd; margin-bottom: 5px; }
-            .suggestion { font-style: italic; color: #555; }
+            .step-title { font-weight: bold; margin-top: 20px; padding: 8px 12px; color: white; border-radius: 4px; letter-spacing: 0.5px; }
+            .step-p1 { background-color: #e74c3c; } /* Red */
+            .step-p2 { background-color: #f39c12; } /* Orange */
+            .step-p3 { background-color: #3498db; } /* Blue */
             
-            .code-viewer { font-family: 'Courier New', monospace; background: #2d2d2d; color: #f8f8f2; padding: 10px; border-radius: 5px; overflow-x: auto; }
+            /* Box chứa từng lỗi */
+            .issue-item { margin-top: 15px; padding: 15px 20px; border-left: 5px solid #ddd; background-color: #fafafa; border-radius: 0 8px 8px 0; }
+            
+            /* --- CSS DÀNH RIÊNG CHO AI SUGGESTION (MARKDOWN) --- */
+            .suggestion { margin-top: 12px; color: #34495e; font-size: 15px; line-height: 1.6; }
+            .suggestion p { margin: 8px 0; }
+            /* Inline code (ví dụ: `int a`) */
+            .suggestion code { background-color: #fce4ec; color: #d81b60; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; }
+            /* Khối code bự (Block code) */
+            .suggestion pre { background-color: #282c34; color: #abb2bf; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: 'Courier New', Courier, monospace; margin: 12px 0; border: 1px solid #1e2227; }
+            .suggestion pre code { background-color: transparent; color: inherit; padding: 0; }
+            
+            .code-viewer { font-family: 'Courier New', monospace; background: #282c34; color: #abb2bf; padding: 15px; border-radius: 6px; overflow-x: auto; }
             .code-line { display: block; white-space: pre; padding: 2px 0; }
-            .line-number { color: #75715e; margin-right: 15px; user-select: none; }
-            /* Highlighting classes for code lines */
-            .highlight-p1 { background-color: rgba(217, 83, 79, 0.4); } /* Red tint */
-            .highlight-p2 { background-color: rgba(240, 173, 78, 0.4); } /* Orange tint */
-            .highlight-p3 { background-color: rgba(91, 192, 222, 0.4); } /* Blue tint */
+            .line-number { color: #5c6370; margin-right: 15px; user-select: none; }
+            .highlight-p1 { background-color: rgba(231, 76, 60, 0.3); } 
+            .highlight-p2 { background-color: rgba(243, 156, 18, 0.3); } 
+            .highlight-p3 { background-color: rgba(52, 152, 219, 0.3); } 
         </style>
         
         </head>
         <body>
             <div class="container">
                 <h1>Báo cáo phân tích mã nguồn</h1>
-                <div class="guide-section"><h2>📋 Hướng dẫn sửa lỗi từng bước</h2><div class="step-title step-p1">BƯỚC 1: SỬA LỖI CẤU TRÚC & CÚ PHÁP (BẮT BUỘC)</div><div class="issue-item"><strong>[Dòng 21] Thiếu dấu chấm phẩy.</strong><br><span class="suggestion">💡 Gợi ý: Thêm &#x27;;&#x27; vào cuối dòng này.</span></div></div>
+                <div class="guide-section"><h2>📋 Hướng dẫn sửa lỗi từng bước</h2><div class="step-title step-p1">BƯỚC 1: SỬA LỖI CẤU TRÚC & CÚ PHÁP (BẮT BUỘC)</div><div class="issue-item"><strong>[Toàn cục] Thiếu thư viện &lt;iostream&gt;.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm dòng '#include <iostream>' vào đầu tệp tin để sử dụng cin/cout.</p></div></div><div class="issue-item"><strong>[Dòng 1] Dấu mở &#x27;{&#x27; chưa được đóng.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm dấu đóng tương ứng cho '{'.</p></div></div><div class="issue-item"><strong>[Dòng 2] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 3] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 6] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 9] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 10] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 14] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="issue-item"><strong>[Dòng 16] Thiếu dấu chấm phẩy.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Thêm ';' vào cuối dòng này.</p></div></div><div class="step-title step-p2">BƯỚC 2: KIỂM TRA LOGIC</div><div class="issue-item"><strong>[Dòng 6] Lỗi chia cho số 0.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Đảm bảo số chia khác 0 trước khi thực hiện phép tính.</p></div></div><div class="issue-item"><strong>[Dòng 10] Có thể dereference con trỏ null hoặc chưa khởi tạo.</strong><br><div class="suggestion">💡 <strong>Gợi ý từ AI:</strong><br><p>Đảm bảo con trỏ được khởi tạo hợp lệ và kiểm tra nullptr trước khi dereference.</p></div></div></div>
                 <hr>
-                <div class="code-viewer-container"><h2>💻 Mã nguồn của bạn</h2><div class="code-viewer"><span class="code-line "><span class="line-number">  1 |</span>#include &lt;iostream&gt;</span><span class="code-line "><span class="line-number">  2 |</span>using namespace std;</span><span class="code-line "><span class="line-number">  3 |</span></span><span class="code-line "><span class="line-number">  4 |</span>// Void function definition</span><span class="code-line "><span class="line-number">  5 |</span>void hello() {</span><span class="code-line "><span class="line-number">  6 |</span>    cout &lt;&lt; &quot;GeeksforGeeks&quot; &lt;&lt; endl;</span><span class="code-line "><span class="line-number">  7 |</span>}</span><span class="code-line "><span class="line-number">  8 |</span></span><span class="code-line "><span class="line-number">  9 |</span>// Return-type function definition</span><span class="code-line "><span class="line-number"> 10 |</span>int square(int x) {</span><span class="code-line "><span class="line-number"> 11 |</span>    return x * x;</span><span class="code-line "><span class="line-number"> 12 |</span>}</span><span class="code-line "><span class="line-number"> 13 |</span></span><span class="code-line "><span class="line-number"> 14 |</span>int main() {</span><span class="code-line "><span class="line-number"> 15 |</span></span><span class="code-line "><span class="line-number"> 16 |</span>    // Calling the void function</span><span class="code-line "><span class="line-number"> 17 |</span>    hello();</span><span class="code-line "><span class="line-number"> 18 |</span></span><span class="code-line "><span class="line-number"> 19 |</span>    // Calling the return-type function</span><span class="code-line "><span class="line-number"> 20 |</span>    int result = square(5);</span><span class="code-line highlight-p1"><span class="line-number"> 21 |</span>    cout &lt;&lt; &quot;Square of 5 is: &quot; &lt;&lt; result &lt;&lt; endl</span><span class="code-line "><span class="line-number"> 22 |</span></span><span class="code-line "><span class="line-number"> 23 |</span>    return 0;</span><span class="code-line "><span class="line-number"> 24 |</span>}</span></div></div>
+                <div class="code-viewer-container"><h2>💻 Mã nguồn của bạn</h2><div class="code-viewer"><span class="code-line highlight-p1"><span class="line-number">  1 |</span>int main() {</span><span class="code-line highlight-p1"><span class="line-number">  2 |</span>    int x = 100;</span><span class="code-line highlight-p1"><span class="line-number">  3 |</span>    int y = 0;</span><span class="code-line "><span class="line-number">  4 |</span>    </span><span class="code-line "><span class="line-number">  5 |</span>    // Lỗi 1: Chia cho 0</span><span class="code-line highlight-p1"><span class="line-number">  6 |</span>    int result = x / 0; </span><span class="code-line "><span class="line-number">  7 |</span></span><span class="code-line "><span class="line-number">  8 |</span>    // Lỗi 2: Dereference con trỏ chưa khởi tạo</span><span class="code-line highlight-p1"><span class="line-number">  9 |</span>    int* ptr;</span><span class="code-line highlight-p1"><span class="line-number"> 10 |</span>    cout &lt;&lt; *ptr; </span><span class="code-line "><span class="line-number"> 11 |</span></span><span class="code-line "><span class="line-number"> 12 |</span>    // Lỗi 3: Quên đóng ngoặc nhọn</span><span class="code-line "><span class="line-number"> 13 |</span>    if (x &gt; 50) {</span><span class="code-line highlight-p1"><span class="line-number"> 14 |</span>        x = 20;</span><span class="code-line "><span class="line-number"> 15 |</span></span><span class="code-line highlight-p1"><span class="line-number"> 16 |</span>    return 0</span><span class="code-line "><span class="line-number"> 17 |</span>}</span></div></div>
             </div>
         </body>
         </html>
