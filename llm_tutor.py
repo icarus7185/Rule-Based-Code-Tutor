@@ -1,11 +1,12 @@
 import os
 from google import genai
+from ollama import chat
 
 # Khởi tạo client. 
 # Mẹo: Lúc demo hãy lấy API Key miễn phí từ Google AI Studio và gán vào biến môi trường GEMINI_API_KEY
 client = genai.Client(api_key="AIzaSyAx8sL0SbPuLCNskfcoGmrs9JXiv9wFtEc")
 
-def generate_context_aware_explanation(source_code, issue):
+def generate_context_aware_explanation(model, source_code, issue):
     """Gọi Gemini API để tạo lời giải thích theo ngữ cảnh."""
     line_number = issue['line']
     error_message = issue['message']
@@ -37,12 +38,23 @@ def generate_context_aware_explanation(source_code, issue):
     """
 
     try:
-        # Dùng model flash để phản hồi cực nhanh, phù hợp cho Web API
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-        )
-        return response.text.strip()
+        if model == 'genai':
+            # Dùng model flash để phản hồi cực nhanh, phù hợp cho Web API
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+            )
+            return response.text.strip()
+        else:
+            ollama_promt = [
+                 {
+                     "role": "user",
+                     "content": prompt,
+                 },
+             ]
+            response = chat(model="llama3.2:3b", messages=ollama_promt)
+            return response.message.content
     except Exception as e:
             print(f"🚨 Lỗi gọi API Gemini: {str(e)}") # In lỗi ra để bắt bệnh
             return f"(Hệ thống bận) {basic_suggestion}"
+        

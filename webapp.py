@@ -24,7 +24,7 @@ async def read_root():
 
 # --- API 1: Xử lý Prompt (Text -> Text) ---
 @app.get("/api/analyze")
-async def process_prompt(input_source_code: str = ""):
+async def process_prompt(ai_mode: str = "", input_source_code: str = ""):
     rules = json.load(open('rules.json', encoding='utf-8'))
     tutor = GenericRuleEngine(rules)
     
@@ -35,7 +35,7 @@ async def process_prompt(input_source_code: str = ""):
     for issue in issues:
         # Chỉ gọi API cho lỗi ưu tiên cao (SYNTAX và LOGIC) để tránh lạm dụng API
         if issue['priority'] <= 2: 
-            ai_explanation = generate_context_aware_explanation(input_source_code, issue)
+            ai_explanation = generate_context_aware_explanation(ai_mode, input_source_code, issue)
             issue['suggestion'] = ai_explanation # Ghi đè gợi ý cũ kỹ bằng văn hay chữ tốt của Gemini
 
     # 3. Xuất HTML như bình thường
@@ -60,6 +60,45 @@ async def upload_cpp_file(file: UploadFile = File(...)):
         print("--- Đang phân tích file .cpp... ---")
         # print(file_content)
         issues = tutor.analyze(file_content)
+
+        # 2. Dùng Gemini nâng cấp lời giải thích
+        for issue in issues:
+            # Chỉ gọi API cho lỗi ưu tiên cao (SYNTAX và LOGIC) để tránh lạm dụng API
+            if issue['priority'] <= 2: 
+                ai_explanation = generate_context_aware_explanation("genai", file_content, issue)
+                issue['suggestion'] = ai_explanation # Ghi đè gợi ý cũ kỹ bằng văn hay chữ tốt của Gemini
+        
+        # TẠO BÁO CÁO HTML
+        report_obj = ReportMaker(file_content, issues)
+        report_obj.generate_html_report("ket_qua_phan_tich.html")
+        
+        with open('ket_qua_phan_tich.html', 'r', encoding='utf-8') as html_file:
+            html_content = html_file.read()
+        
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        return HTMLResponse(content=f"<h1>Lỗi: {str(e)}</h1>")
+
+# --- API 2: Upload file .cpp và trả về HTML report ---
+@app.post("/api/upload-cpp/local")
+async def upload_cpp_file(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        file_content = content.decode('utf-8')
+        
+        # Phân tích code
+        rules = json.load(open('rules.json', encoding='utf-8'))
+        tutor = GenericRuleEngine(rules)
+        print("--- Đang phân tích file .cpp... ---")
+        # print(file_content)
+        issues = tutor.analyze(file_content)
+
+        # 2. Dùng Gemini nâng cấp lời giải thích
+        for issue in issues:
+            # Chỉ gọi API cho lỗi ưu tiên cao (SYNTAX và LOGIC) để tránh lạm dụng API
+            if issue['priority'] <= 2: 
+                ai_explanation = generate_context_aware_explanation("ollama", file_content, issue)
+                issue['suggestion'] = ai_explanation # Ghi đè gợi ý cũ kỹ bằng văn hay chữ tốt của Gemini
         
         # TẠO BÁO CÁO HTML
         report_obj = ReportMaker(file_content, issues)

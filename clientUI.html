@@ -24,6 +24,7 @@
         .input-method-group { margin-bottom: 20px; }
         .input-method-group label { display: inline-block; margin-right: 20px; margin-top: 0; font-weight: normal; }
         .input-method-group input[type="radio"] { margin-right: 5px; cursor: pointer; }
+        .config-area { display: flex; justify-content: space-between; }
         
         #textareaContainer { display: block; }
         #fileUploadContainer { display: none; }
@@ -32,7 +33,7 @@
     
 <body>
     <h1>Hệ thống Hỗ trợ học Lập trình C++ bằng kỹ thuật Rule-Based</h1>
-    
+    <div class="config-area">
     <div class="input-method-group">
         <label>
             <input type="radio" name="inputMethod" value="textarea" checked onchange="switchInputMethod()">
@@ -43,6 +44,18 @@
             Upload file .cpp
         </label>
     </div>
+    <br/>
+    <div class="input-method-group">
+        <label>
+            <input type="radio" name="aiMode" value="ollama" checked>
+            Local Ollama
+        </label>
+        <label>
+            <input type="radio" name="aiMode" value="genai">
+            GenAI
+        </label>
+    </div>
+    </div>  
 
     <div id="textareaContainer">
         <label>Nhập đoạn code C++:</label>
@@ -82,6 +95,7 @@
 
         async function runWorkflow() {
             const method = document.querySelector('input[name="inputMethod"]:checked').value;
+            const aiMode = document.querySelector('input[name="aiMode"]:checked').value;
             const refinedArea = document.getElementById('sourceCode');
             const btn = document.getElementById('btnGen');
             
@@ -94,7 +108,7 @@
                 // 2. Gọi API dựa vào phương thức nhập
                 if (method === 'textarea') {
                     // Gọi API với dữ liệu từ textarea
-                    htmlResponse = await fetch(`/api/analyze?input_source_code=${encodeURIComponent(refinedArea.value)}`);
+                    htmlResponse = await fetch(`/api/analyze?ai_mode=${aiMode}&input_source_code=${encodeURIComponent(refinedArea.value)}`);
                 } else {
                     // Gọi API upload file .cpp - trả về HTML trực tiếp
                     const fileInput = document.getElementById('cppFileInput');
@@ -108,8 +122,10 @@
                     
                     const formData = new FormData();
                     formData.append('file', file);
+
+                    const apiurl = aiMode == "genai" ? "/api/upload-cpp" : "/api/upload-cpp/local"
                     
-                    htmlResponse = await fetch('/api/upload-cpp', {
+                    htmlResponse = await fetch(apiurl, {
                         method: 'POST',
                         body: formData
                     });
