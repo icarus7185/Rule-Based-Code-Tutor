@@ -102,6 +102,13 @@
             // 1. Reset trạng thái
             btn.disabled = true;
 
+            var iframe = document.getElementById('resultFrame');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            iframeDoc.open();
+            iframeDoc.write("");
+            iframeDoc.close();
+
             try {
                 let htmlResponse;
                 
@@ -142,9 +149,6 @@
                 // window.open(url, '_blank');
                 //console.log(cleanedHtml);
 
-                var iframe = document.getElementById('resultFrame');
-                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                
                 // Write the HTML string into the iframe's document
                 iframeDoc.open();
                 iframeDoc.write(cleanedHtml);
