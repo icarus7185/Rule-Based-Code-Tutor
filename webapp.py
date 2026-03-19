@@ -30,6 +30,7 @@ async def process_prompt(ai_mode: str = "", input_source_code: str = ""):
     
     # 1. Quét code bằng Rule-based cũ
     issues = tutor.analyze(input_source_code)
+    # print(issues)
 
     # 2. Dùng Gemini nâng cấp lời giải thích
     for issue in issues:
@@ -60,6 +61,7 @@ async def upload_cpp_file(file: UploadFile = File(...)):
         print("--- Đang phân tích file .cpp... ---")
         # print(file_content)
         issues = tutor.analyze(file_content)
+        # print(issues)
 
         # 2. Dùng Gemini nâng cấp lời giải thích
         for issue in issues:
@@ -92,6 +94,7 @@ async def upload_cpp_file(file: UploadFile = File(...)):
         print("--- Đang phân tích file .cpp... ---")
         # print(file_content)
         issues = tutor.analyze(file_content)
+        # print(issues)
 
         # 2. Dùng Gemini nâng cấp lời giải thích
         for issue in issues:

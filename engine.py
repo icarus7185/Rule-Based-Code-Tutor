@@ -52,12 +52,13 @@ class GenericRuleEngine:
             if rule.get('scope') == 'LINE':
                 for i, line in enumerate(lines):
                     if not line.strip(): continue
-                    if re.search(rule['pattern'], line):
+                    if re.search(rule['pattern'], line.strip()):
                         all_issues.append({'line': i + 1, 'priority': rule['priority'], 'type': rule['type'], 'message': rule['message'], 'suggestion': rule['suggestion']})
+                        print({'line': i + 1, 'priority': rule['priority'], 'type': rule['type'], 'message': rule['message'], 'suggestion': rule['suggestion']})
             elif rule.get('scope') == 'FILE':
                 if re.search(rule['trigger_pattern'], clean_code) and not re.search(rule['required_pattern'], clean_code):
                     all_issues.append({'line': 0, 'priority': rule['priority'], 'type': rule['type'], 'message': rule['message'], 'suggestion': rule['suggestion']})
-
+                    print({'line': 0, 'priority': rule['priority'], 'type': rule['type'], 'message': rule['message'], 'suggestion': rule['suggestion']})
         # Sắp xếp theo độ ưu tiên (nhỏ trước) và số dòng
         all_issues.sort(key=lambda x: (x['priority'], x['line']))
         return all_issues
